@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script>
+    $(document).ready(function(){
+
+        tabelaUsuarios = function(){
+            $.ajax({
+                url:"tabela.php",
+                method:"post",
+                success:function(response){
+                    console.log(response)
+                    $('#tabela').html(response)
+                }
+            });
+        }
+        
+        valida = function() {
+            if(($("#nome").val()!="")&&($("senha").val()!="")){
+                $.ajax({
+                    url:"cadastra.php",
+                    method:"post",
+                    data:$("#form").serialize(),
+                    success:function(msg){
+                        alert(msg.msg)
+                        if(msg.status!=1){
+                            tabelaUsuarios();
+                            $("#nome").val("");
+                            $("#senha").val("");
+                            
+                        }
+                    }
+                    
+                })
+            }else{
+                alert("Preencha os campos!!");
+                return false;
+            }
+            
+        }
+        tabelaUsuarios();
+    }
+        );
+        </script>
+        </head>
+        <body>
+            <h1>Site confiavel</h1>
+            <form  method="POST" id="form" >
+        Nome : <input type="text" name="txt_nome" id="nome"><br>
+        Senha : <input type="password" name="pwd_senha" id="senha"><br>
+        <input type="button" value="Enviar" onclick="valida()">
+    </form>
+    <table id="tabela">
+        
+    </table>
+</body>
+</html>
